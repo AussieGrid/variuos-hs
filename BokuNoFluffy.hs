@@ -34,7 +34,7 @@ class Misty m where
     unicorn :: a -> m a
   
     furry' :: (a -> b) -> m a -> m b
-    furry' f = unicorn . f
+    furry' f = banana (unicorn . f)
 
 instance Misty [] where
     banana f  = concat . map f 
