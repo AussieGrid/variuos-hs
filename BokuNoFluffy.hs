@@ -38,13 +38,23 @@ class Misty m where
 
 instance Misty [] where
     banana f  = concat . map f 
-    unicorn v = [v]
+    unicorn x = [x]
 
 instance Misty Maybe where
-    banana f (Just v) = Just (f v)
+    banana f (Just v) = Just (f x)
     banana f Nothing  = Nothing
-    unicorn v         = Just v
+    unicorn x         = Just x
 
 instance Misty ((->) t) where
     banana f g = \s -> f (g s) s
     unicorn x = \_ -> x
+
+instance Misty (EitherLeft t) where
+    banana f (EitherLeft (Left x))  = f x
+    banana f (EitherLeft (Right x)) = EitherLeft (Right x)
+    unicorn x                       = EitherLeft (Left x)
+
+instance Misty (EitherRight t) where
+    banana f (EitherLeft (Right x)) = f x
+    banana f (EitherLeft (Left x))  = EitherLeft (Left x)
+    unicorn x                       = EitherLeft (Right x)
