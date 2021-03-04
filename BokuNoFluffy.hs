@@ -9,8 +9,6 @@ class Fluffy where
 instance Fluffy [] where
     furry = map
 
-data Maybe a = Nothing | Just a
-
 instance Fluffy Maybe where
     furry f Nothing  = Nothing
     furry f (Just v) = Just (f v)
@@ -58,3 +56,35 @@ instance Misty (EitherRight t) where
     banana f (EitherLeft (Right x)) = f x
     banana f (EitherLeft (Left x))  = EitherLeft (Left x)
     unicorn x                       = EitherLeft (Right x)
+
+jellybean :: (Misty m) => m (m a) -> m a
+jellybean = banana id
+
+apple :: (Misty m) => m a -> m (a -> b) -> m b
+apple x f = banana (\v -> banana (\g -> unicorn (g v)) f) x 
+
+moppy :: (Misty m) => [a] -> (a -> m b) -> m [b]
+moppy xs f = 
+
+-- (bonus: use moppy)
+sausage :: (Misty m) => [m a] -> m [a]
+sausage = error "todo"
+
+-- (bonus: use apple + furry')
+banana2 :: (Misty m) => (a -> b -> c) -> m a -> m b -> m c
+banana2 = error "todo"
+
+-- (bonus: use apple + banana2)
+banana3 :: (Misty m) => (a -> b -> c -> d) -> m a -> m b -> m c -> m d
+banana3 = error "todo"
+
+-- (bonus: use apple + banana3)
+banana4 :: (Misty m) => (a -> b -> c -> d -> e) -> m a -> m b -> m c -> m d -> m e
+banana4 = error "todo"
+
+newtype State s a = State {
+  state :: (s -> (s, a))
+}
+
+instance Fluffy (State s) where
+  furry = error "todo"
